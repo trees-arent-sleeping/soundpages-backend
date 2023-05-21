@@ -14,6 +14,9 @@ mongoose.connect(process.env.MONGO_URI, {
   useUnifiedTopology: true,
 });
 
+// routes
+app.use("/", require("./controllers/soundboardController"));
+
 // connect to mongoDB
 const db = mongoose.connection;
 db.on("error", console.error.bind(console, "mongoDB connection error:"));
