@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Create a Soundboard</title>
+  </head>
+  <body>
+    <h1>Create a Soundboard</h1>
+    <form action="/soundboards" method="post" enctype="multipart/form-data">
+      <label for="title">Title:</label><br />
+      <input type="text" id="title" name="title" /><br />
+      <label for="audio">Audio:</label><br />
+      <input type="file" id="audio" name="audio" multiple /><br />
+      <input type="submit" value="Create" />
+    </form>
+  </body>
+</html>

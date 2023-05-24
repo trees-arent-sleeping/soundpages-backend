@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Soundpages</title>
+  </head>
+  <body>
+    <h1>Soundboards</h1>
+  </br>
+    <ul>
+      <% soundboards.forEach(soundboard => { %>
+      <li>
+        <a href="/soundboards/<%= soundboard._id %>"><%= soundboard.title %></a>
+      </li>
+      <% }); %>
+    </ul>
+    <a href="/soundboards/create">Create New Soundboard</a>
+  </body>
+</html>
