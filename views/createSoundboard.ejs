@@ -8,9 +8,31 @@
     <form action="/soundboards" method="post" enctype="multipart/form-data">
       <label for="title">Title:</label><br />
       <input type="text" id="title" name="title" /><br />
-      <label for="audio">Audio:</label><br />
-      <input type="file" id="audio" name="audio" multiple /><br />
+      <div id="audiosContainer">
+        <div class="audioContainer">
+          <label for="audioTitle">Audio Title:</label><br />
+          <input type="text" class="audioTitle" name="audioTitle[]" /><br />
+          <label for="audioFiles">Audio:</label><br />
+          <input type="file" class="audioFile" name="audioFiles[]" /><br />
+        </div>
+      </div>
+      <button type="button" id="addAudio">Add another audio file</button><br />
       <input type="submit" value="Create" />
     </form>
+
+    <script>
+      document
+        .getElementById("addAudio")
+        .addEventListener("click", function () {
+          var audiosContainer = document.getElementById("audiosContainer");
+          var newAudioInput = document.createElement("div");
+
+          newAudioInput.className = "audioContainer";
+          newAudioInput.innerHTML =
+            '<label for="audioFiles">Audio:</label><br /><input type="file" class="audioFile" name="audioFiles[]" /><br /><label for="audioTitle">Audio Title:</label><br /><input type="text" class="audioTitle" name="audioTitle[]" /><br />';
+
+          audiosContainer.appendChild(newAudioInput);
+        });
+    </script>
   </body>
 </html>

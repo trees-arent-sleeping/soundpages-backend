@@ -8,7 +8,7 @@ const app = express();
 const PORT = 3000;
 
 // set up multer storage
-const upload = multer().array("sounds");
+const upload = multer();
 
 // middleware
 app.use(express.json());

@@ -3,7 +3,7 @@ const router = express.Router();
 const multer = require("multer");
 
 // set up multer storage
-const upload = multer().array("audio");
+const upload = multer();
 
 const Soundboard = require("../models/Soundboard");
 
@@ -37,40 +37,40 @@ router.get("/soundboards/:id", async (req, res) => {
 });
 
 // create soundboard
-router.post("/soundboards", upload, async (req, res) => {
-  const { title } = req.body;
-  const sounds = [];
+router.post(
+  "/soundboards",
+  upload.array("audioFiles[]"), // Note that this should be audioFiles[]
+  async (req, res) => {
+    const { title, audioTitle } = req.body;
+    const sounds = [];
 
-  if (req.files && req.files.length > 0) {
-    const soundTitles = req.body["soundTitles[]"];
-
-    req.files.forEach((file, index) => {
-      sounds.push({
-        title: Array.isArray(soundTitles)
-          ? soundTitles[index] || file.originalname
-          : soundTitles || file.originalname,
-        filename: file.originalname,
-        contentType: file.mimetype,
-        fileSize: file.size,
-        duration: 15,
-        uniqueID: Date.now().toString(),
-        buffer: file.buffer,
+    if (req.files && req.files.length > 0) {
+      req.files.forEach((file, index) => {
+        sounds.push({
+          title: audioTitle[index] || file.originalname,
+          filename: file.originalname,
+          contentType: file.mimetype,
+          fileSize: file.size,
+          duration: 15,
+          uniqueID: Date.now().toString(),
+          buffer: file.buffer,
+        });
       });
-    });
-  }
+    }
 
-  try {
-    const soundboard = new Soundboard({
-      title,
-      sounds,
-    });
+    try {
+      const soundboard = new Soundboard({
+        title,
+        sounds,
+      });
 
-    await soundboard.save();
-    res.redirect("/");
-  } catch (err) {
-    console.error(err);
-    res.status(500).send("Internal Server Error");
+      await soundboard.save();
+      res.redirect("/");
+    } catch (err) {
+      console.error(err);
+      res.status(500).send("Internal Server Error");
+    }
   }
-});
+);
 
 module.exports = router;
