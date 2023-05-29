@@ -37,40 +37,39 @@ router.get("/soundboards/:id", async (req, res) => {
 });
 
 // create soundboard
-router.post(
-  "/soundboards",
-  upload.array("audioFiles[]"), // Note that this should be audioFiles[]
-  async (req, res) => {
-    const { title, audioTitle } = req.body;
-    const sounds = [];
+router.post("/soundboards", upload.array("audioFiles[]"), async (req, res) => {
+  const { title } = req.body;
+  const audioTitle = Array.isArray(req.body.audioTitle)
+    ? req.body.audioTitle
+    : [req.body.audioTitle];
+  const sounds = [];
 
-    if (req.files && req.files.length > 0) {
-      req.files.forEach((file, index) => {
-        sounds.push({
-          title: audioTitle[index] || file.originalname,
-          filename: file.originalname,
-          contentType: file.mimetype,
-          fileSize: file.size,
-          duration: 15,
-          uniqueID: Date.now().toString(),
-          buffer: file.buffer,
-        });
+  if (req.files && req.files.length > 0) {
+    req.files.forEach((file, index) => {
+      sounds.push({
+        title: audioTitle[index] || file.originalname,
+        filename: file.originalname,
+        contentType: file.mimetype,
+        fileSize: file.size,
+        duration: 15,
+        uniqueID: `${Date.now().toString()}-${index}`, // add index to the uniqueID to prevent all sounds having the same ID
+        buffer: file.buffer,
       });
-    }
-
-    try {
-      const soundboard = new Soundboard({
-        title,
-        sounds,
-      });
-
-      await soundboard.save();
-      res.redirect("/");
-    } catch (err) {
-      console.error(err);
-      res.status(500).send("Internal Server Error");
-    }
+    });
   }
-);
+
+  try {
+    const soundboard = new Soundboard({
+      title,
+      sounds,
+    });
+
+    await soundboard.save();
+    res.redirect("/");
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Internal Server Error");
+  }
+});
 
 module.exports = router;
