@@ -72,4 +72,77 @@ router.post("/soundboards", upload.array("audioFiles[]"), async (req, res) => {
   }
 });
 
+// edit soundboard form
+router.get("/soundboards/:id/edit", async (req, res) => {
+  try {
+    const soundboard = await Soundboard.findById(req.params.id).populate(
+      "sounds"
+    );
+    res.render("editSoundboard", { soundboard });
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Internal Server Error");
+  }
+});
+
+// update soundboard
+router.put("/soundboards/:id/sounds/:soundId", async (req, res) => {
+  try {
+    const { id, soundId } = req.params;
+    const { newTitle } = req.body;
+
+    await Soundboard.updateOne(
+      { _id: id, "sounds._id": soundId },
+      { $set: { "sounds.$.title": newTitle } }
+    );
+    res.redirect(`/soundboards/${id}/edit`);
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("internal server error");
+  }
+});
+
+// add sound to soundboard
+router.post(
+  "/soundboards/:id/sounds",
+  upload.single("audioFile"),
+  async (req, res) => {
+    try {
+      const { id } = req.params;
+      const { title } = req.body;
+      const { originalname, mimetype, size, buffer } = req.file;
+
+      const newSound = {
+        title: title || originalname,
+        filename: originalname,
+        contentType: mimetype,
+        fileSize: size,
+        duration: 15,
+        uniqueID: `${Date.now().toString()}`,
+        buffer: buffer,
+      };
+
+      await Soundboard.updateOne({ _id: id }, { $push: { sounds: newSound } });
+      res.redirect(`/soundboards/${id}/edit`);
+    } catch (err) {
+      console.error(err);
+      res.status(500).send("internal server error");
+    }
+  }
+);
+
+// delete sound from soundboard
+router.delete("/soundboards/:id/sounds/:soundId", async (req, res) => {
+  try {
+    await Soundboard.updateOne(
+      { _id: req.params.id },
+      { $pull: { sounds: { _id: req.params.soundId } } }
+    );
+    res.redirect(`/soundboards/${req.params.id}/edit`);
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("internal server error");
+  }
+});
+
 module.exports = router;

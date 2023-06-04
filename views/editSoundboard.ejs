@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Edit Soundboard</title>
+  </head>
+  <body>
+    <h1>Edit Soundboard: <%= soundboard.title %></h1>
+    <h2>Edit Sound Titles</h2>
+    <% soundboard.sounds.forEach((sound) => { %>
+    <form
+      action="/soundboards/<%= soundboard._id %>/sounds/<%= sound._id %>?_method=PUT"
+      method="POST"
+    >
+      <input type="text" name="newTitle" value="<%= sound.title %>" />
+      <button type="submit">Update Title</button>
+    </form>
+    <form
+      action="/soundboards/<%= soundboard._id %>/sounds/<%= sound._id %>?_method=DELETE"
+      method="POST"
+    >
+      <button type="submit">Delete Sound</button>
+    </form>
+    <% }); %>
+    <h2>Add New Sound</h2>
+    <form
+      action="/soundboards/<%= soundboard._id %>/sounds"
+      method="POST"
+      enctype="multipart/form-data"
+    >
+      <label for="title">Sound Title:</label><br />
+      <input type="text" id="title" name="title" /><br />
+      <label for="audioFile">Sound File:</label><br />
+      <input type="file" id="audioFile" name="audioFile" /><br />
+      <button type="submit">Add Sound</button>
+    </form>
+  </body>
+</html>

@@ -1,5 +1,6 @@
 require("dotenv").config();
 const express = require("express");
+const methodOverride = require("method-override");
 const multer = require("multer");
 const mongoose = require("mongoose");
 const path = require("path");
@@ -15,6 +16,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.set("view engine", "ejs");
 app.use(express.static(path.join(__dirname, "public")));
+app.use(methodOverride("_method"));
 
 // connect to mongo
 mongoose.connect(process.env.MONGO_URI, {
