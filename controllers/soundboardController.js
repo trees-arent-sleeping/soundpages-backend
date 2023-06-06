@@ -37,7 +37,7 @@ router.get("/soundboards/:id", async (req, res) => {
 });
 
 // create soundboard
-router.post("/soundboards", upload.array("audioFiles[]"), async (req, res) => {
+router.post("/soundboards", upload.any(), async (req, res) => {
   const { title } = req.body;
   const audioTitle = Array.isArray(req.body.audioTitle)
     ? req.body.audioTitle
@@ -85,22 +85,79 @@ router.get("/soundboards/:id/edit", async (req, res) => {
   }
 });
 
-// update soundboard
-router.put("/soundboards/:id/sounds/:soundId", async (req, res) => {
+// delete soundboard
+router.delete("/soundboards/:id", async (req, res) => {
   try {
-    const { id, soundId } = req.params;
-    const { newTitle } = req.body;
+    const soundboard = await Soundboard.findById(req.params.id);
+    if (!soundboard) {
+      res.status(404).send("Soundboard not found");
+      return;
+    }
 
-    await Soundboard.updateOne(
-      { _id: id, "sounds._id": soundId },
-      { $set: { "sounds.$.title": newTitle } }
-    );
-    res.redirect(`/soundboards/${id}/edit`);
+    await soundboard.deleteOne();
+    res.redirect("/");
   } catch (err) {
     console.error(err);
-    res.status(500).send("internal server error");
+    res.status(500).send("Internal Server Error");
   }
 });
+
+// update soundboard
+router.put(
+  "/soundboards/:id",
+  upload.array("audioFile[]"),
+  async (req, res) => {
+    try {
+      const { id } = req.params;
+      const { deleteSounds, editTitles } = req.body;
+      let newTitle = Array.isArray(req.body.newTitle)
+        ? req.body.newTitle
+        : [req.body.newTitle];
+
+      // delete Sounds
+      if (deleteSounds && deleteSounds.length > 0) {
+        await Soundboard.updateOne(
+          { _id: id },
+          { $pull: { sounds: { _id: { $in: deleteSounds } } } }
+        );
+      }
+
+      // edit sound titles
+      if (editTitles) {
+        for (const [soundId, newTitle] of Object.entries(editTitles)) {
+          await Soundboard.updateOne(
+            { "sounds._id": soundId },
+            { $set: { "sounds.$.title": newTitle } }
+          );
+        }
+      }
+
+      // add new sounds
+      if (req.files.length > 0) {
+        const newSounds = req.files.map((file, index) => {
+          return {
+            title: newTitle[index] || file.originalname,
+            filename: file.originalname,
+            contentType: file.mimetype,
+            fileSize: file.size,
+            duration: 15,
+            uniqueID: `${Date.now().toString()}-${index}`,
+            buffer: file.buffer,
+          };
+        });
+        await Soundboard.updateOne(
+          { _id: id },
+          { $push: { sounds: { $each: newSounds } } }
+        );
+      }
+
+      res.redirect(`/soundboards/${id}`);
+    } catch (err) {
+      console.error(err);
+      res.status(500).send("Internal Server Error");
+    }
+  }
+);
 
 // add sound to soundboard
 router.post(

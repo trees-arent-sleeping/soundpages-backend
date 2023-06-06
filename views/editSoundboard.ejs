@@ -5,33 +5,44 @@
   </head>
   <body>
     <h1>Edit Soundboard: <%= soundboard.title %></h1>
-    <h2>Edit Sound Titles</h2>
-    <% soundboard.sounds.forEach((sound) => { %>
     <form
-      action="/soundboards/<%= soundboard._id %>/sounds/<%= sound._id %>?_method=PUT"
-      method="POST"
-    >
-      <input type="text" name="newTitle" value="<%= sound.title %>" />
-      <button type="submit">Update Title</button>
-    </form>
-    <form
-      action="/soundboards/<%= soundboard._id %>/sounds/<%= sound._id %>?_method=DELETE"
-      method="POST"
-    >
-      <button type="submit">Delete Sound</button>
-    </form>
-    <% }); %>
-    <h2>Add New Sound</h2>
-    <form
-      action="/soundboards/<%= soundboard._id %>/sounds"
+      action="/soundboards/<%= soundboard._id %>?_method=PUT"
       method="POST"
       enctype="multipart/form-data"
     >
-      <label for="title">Sound Title:</label><br />
-      <input type="text" id="title" name="title" /><br />
-      <label for="audioFile">Sound File:</label><br />
-      <input type="file" id="audioFile" name="audioFile" /><br />
-      <button type="submit">Add Sound</button>
+      <h2>Edit Sound Titles and Select Sounds to Delete</h2>
+      <% soundboard.sounds.forEach((sound) => { %>
+      <input type="checkbox" name="deleteSounds[]" value="<%= sound._id %>" />
+      <input
+        type="text"
+        name="editTitles[<%= sound._id %>]"
+        value="<%= sound.title %>"
+      /><br />
+      <% }); %>
+      <h2>Add New Sounds</h2>
+      <input type="button" value="Add New Sound" onClick="addNewSoundField()" />
+      <div id="newSoundsContainer"></div>
+      <button type="submit">Submit Changes</button>
+    </form>
+    <script>
+      function addNewSoundField() {
+        var container = document.getElementById("newSoundsContainer");
+        var soundDiv = document.createElement("div");
+        soundDiv.innerHTML = `
+          <label for="title">Sound Title:</label><br />
+          <input type="text" name="newTitle[]" /><br />
+          <label for="audioFile">Sound File:</label><br />
+          <input type="file" name="audioFile[]" /><br />
+        `;
+        container.appendChild(soundDiv);
+      }
+    </script>
+    <h2>Delete Soundboard</h2>
+    <form
+      action="/soundboards/<%= soundboard._id %>?_method=DELETE"
+      method="POST"
+    >
+      <button type="submit">Delete Soundboard</button>
     </form>
   </body>
 </html>

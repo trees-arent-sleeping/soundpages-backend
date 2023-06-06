@@ -52,7 +52,7 @@ app.get("/sounds/:uniqueID", async (req, res) => {
     res.send(sound.buffer);
   } catch (err) {
     console.error(err);
-    res.status(500).send("Internal Server Error");
+    res.status(500).send("internal server error");
   }
 });
 
