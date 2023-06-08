@@ -4,6 +4,11 @@ const methodOverride = require("method-override");
 const multer = require("multer");
 const mongoose = require("mongoose");
 const path = require("path");
+const passport = require("passport");
+const session = require("express-session");
+const crypto = require("crypto");
+
+require("./config/passport");
 
 const app = express();
 const PORT = 3000;
@@ -27,6 +32,19 @@ mongoose.connect(process.env.MONGO_URI, {
 // models
 const Soundboard = require("./models/Soundboard");
 
+// session config
+app.use(
+  session({
+    secret: crypto.randomBytes(32).toString("hex"),
+    resave: false,
+    saveUninitialized: false,
+  })
+);
+
+// passport middleware
+app.use(passport.initialize());
+app.use(passport.session());
+
 // routes
 app.use("/", require("./controllers/soundboardController"));
 
@@ -36,7 +54,7 @@ app.get("/sounds/:uniqueID", async (req, res) => {
       "sounds.uniqueID": req.params.uniqueID,
     });
     if (!soundboard) {
-      res.status(404).send("Sound not found");
+      res.status(404).send("sound not found");
       return;
     }
 
@@ -44,7 +62,7 @@ app.get("/sounds/:uniqueID", async (req, res) => {
       (sound) => sound.uniqueID === req.params.uniqueID
     );
     if (!sound) {
-      res.status(404).send("Sound not found");
+      res.status(404).send("sound not found");
       return;
     }
 
@@ -54,6 +72,27 @@ app.get("/sounds/:uniqueID", async (req, res) => {
     console.error(err);
     res.status(500).send("internal server error");
   }
+});
+
+// auth routes
+app.get(
+  "/auth/google",
+  passport.authenticate("google", {
+    scope: ["profile"],
+  })
+);
+
+app.get(
+  "/auth/google/callback",
+  passport.authenticate("google", { failureRedirect: "/login" }),
+  function (req, res) {
+    res.redirect("/");
+  }
+);
+
+app.get("/logout", (req, res) => {
+  req.logout();
+  res.redirect("/");
 });
 
 // connect to mongo

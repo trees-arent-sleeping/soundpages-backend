@@ -5,6 +5,9 @@
   </head>
   <body>
     <h1>Soundboard: <%= soundboard.title %></h1>
+    <% if (username) { %>
+    <h2>Collection by <%= username %></h2>
+    <% } %>
     <ul>
       <% soundboard.sounds.forEach(sound => { %>
       <li>
@@ -18,8 +21,11 @@
       </li>
       <% }); %>
     </ul>
+    <% if (user && soundboard.creator && soundboard.creator.equals(user._id)) {
+    %>
     <form action="/soundboards/<%= soundboard._id %>/edit" method="get">
       <button type="submit">Edit</button>
     </form>
+    <% } %>
   </body>
 </html>

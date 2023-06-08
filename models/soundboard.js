@@ -5,6 +5,10 @@ const soundSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  creator: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User",
+  },
   filename: {
     type: String,
     required: true,
@@ -59,6 +63,10 @@ const SoundboardSchema = new mongoose.Schema({
     required: true,
   },
   sounds: [soundSchema],
+  creator: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User",
+  },
 });
 
 const Soundboard = mongoose.model("Soundboard", SoundboardSchema);
