@@ -62,6 +62,8 @@ const SoundboardSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  description: { type: String },
+  image: { data: Buffer, contentType: String },
   sounds: [soundSchema],
   creator: {
     type: mongoose.Schema.Types.ObjectId,
