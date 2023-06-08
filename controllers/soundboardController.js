@@ -78,7 +78,8 @@ router.get("/soundboards/:id", async (req, res) => {
 
 // create soundboard
 router.post("/soundboards", upload.any(), ensureAuth, async (req, res) => {
-  const { title } = req.body;
+  const { title, description } = req.body;
+  const image = req.files.find((file) => file.fieldname === "image");
   const audioTitle = Array.isArray(req.body.audioTitle)
     ? req.body.audioTitle
     : [req.body.audioTitle];
@@ -101,6 +102,11 @@ router.post("/soundboards", upload.any(), ensureAuth, async (req, res) => {
   try {
     const soundboard = new Soundboard({
       title,
+      description,
+      image: {
+        data: image.buffer,
+        contentType: image.mimetype,
+      },
       sounds,
       creator: req.user._id,
     });
@@ -128,11 +134,15 @@ router.get("/soundboards/:id/edit", ensureOwner, async (req, res) => {
 
 // update soundboard
 router.put("/soundboards/:id", upload.any(), ensureOwner, async (req, res) => {
-  const { editTitles, deleteSounds, newTitle } = req.body;
+  const { editTitles, deleteSounds, newTitle, description } = req.body;
+  const image = req.files.find((file) => file.fieldname === "image");
 
   try {
     const soundboard = await Soundboard.findById(req.params.id);
-
+    soundboard.description = description;
+    if (image) {
+      soundboard.image.data = image.buffer;
+      soundboard.image.contentType = image.mimetype
     if (!soundboard) {
       return res.status(404).send("Soundboard not found");
     }
