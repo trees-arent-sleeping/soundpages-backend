@@ -1,0 +1,191 @@
+* {
+    font-family: 'DotGothic16', sans-serif;
+    font-weight: 100;
+  }
+  
+  main {
+    margin-top:150px;
+  }
+
+  nav {
+    color: 1b262c;
+    font-size: 18px;
+    position: absolute;
+    width: 80vw;
+    top: 0;
+    left: 10vw;
+    background-color: slategrey;
+  }
+
+  nav h1 {
+    margin-left: 10px;
+    text-decoration: underline;
+  }
+
+  nav div {
+    margin-left: 10px;
+  }
+
+
+  body {
+    font-family: Arial, sans-serif;
+    background: url(../show.gif);
+    margin: 0;
+    padding: 0;
+    color: white;
+  }
+  
+  .soundboard-header {
+    text-align: center;
+  }
+  
+  .soundboard-header h1{
+    color: black;
+    border: 10px ridge rgb(97, 52, 20);
+    border-radius: 25px;
+    margin: 30px 30% 10px 30%;
+    color:rgba(220, 20, 60, 0.796);
+    background-color: #3282b8;
+  }
+  
+
+  .soundboard-header h2 {
+    font-size: 18px;
+    margin: 30px 30% 10px 30%;
+    color:white;
+  }
+  
+  .soundboard-image {
+    width: 100px;
+    height: 100px;
+  }
+
+  .sounds-grid {
+    box-sizing: border-box;
+    background-color: rgba(26, 135, 26, 0.947);
+    box-shadow: 2px 3px rgba(0, 0, 0, 0.464);
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+    gap: 44px;
+    padding: 20px;
+    position: sticky;
+    right: 39%;
+    left:9%;
+    border: 6px groove rgb(97, 52, 20);
+    border-right: 6px solid rgb(66, 75, 84);
+    border-left: 6px solid rgb(66, 75, 84);
+    width: 80vw;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  
+  
+  .sound-item {
+    font-size: 14px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border: 4px groove #bba988;
+    border-radius: 10px;
+    background-color: #e2cda6;
+    font-weight: bolder;
+    justify-content: space-between;
+    margin-bottom: 20px;
+    position: relative;
+    width: 95px;
+    aspect-ratio: 1 / 1;
+    min-width: 70px;
+    max-width: 100px;
+    box-shadow: 3px 3px rgba(1, 86, 86, 0.783);
+    overflow: hidden;
+  }
+  
+  .soundboard-header img {
+    border: 5px inset #ffffff;
+    border-radius: 3px;
+  }
+  
+  .sound-button {
+    width: 100%;
+    background-color: transparent;
+    color: #333;
+    border: none;
+    text-shadow: 1px 1px #bba9886f;
+    padding: 10px;
+    cursor: pointer;
+    text-align: center;
+    font-size: 0.9em;
+    flex-grow: 1;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    position: relative;
+    z-index: 1;
+  }
+  
+  .key-bind {
+    position: absolute;
+    top: 5px;
+    left: 5px;
+    background-color: rgba(255, 255, 255, 0.8);
+    padding: 2px 4px;
+    border-radius: 3px;
+    font-weight: bold;
+    font-size: 12px;
+    z-index: 2;
+  }
+  
+  .key-bind input {
+    width: 16px;
+    text-align: center;
+    box-shadow: 1px 2px rgb(0, 128, 128);
+    text-shadow: 2px 2px rgba(0, 128, 128, 0.599);
+    background-color: #89c7f155;
+    color: black;
+    font-weight: bolder;
+    border-style: hidden;
+    border-radius: 3px;
+  }
+  
+  
+  .key-bind span {
+    background-color: #f0f0f0;
+    padding: 2px 4px;
+    border-radius: 3px;
+    font-weight: bold;
+    font-size: 12px;
+  }
+
+  footer {
+
+    z-index: 2;
+    position: fixed;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+
+  .soundboard-description {
+    text-align: center;
+    width: 100vw;
+    font-size: 22px;
+    color: black;
+    margin: 10px 20vw 0 20vw;
+    width: 80vw;
+    background-color: slategrey;
+  }
+
+  .speaker {
+    margin-left: 40px;
+  }
+
+  .speaker img{
+    border: 3px solid black;
+    width: 22px;
+    height: 22px;
+    margin-right: 10px
+  }
+  
+  :visited {
+    color: inherit;
+  }

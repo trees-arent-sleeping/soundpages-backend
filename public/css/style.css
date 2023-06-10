@@ -1,0 +1,93 @@
+* {
+    font-family: 'DotGothic16', sans-serif;
+    font-size: small;
+    font-weight: 100;
+  }
+
+body, ul {
+    margin: 0;
+    padding: 0;
+  }
+  
+  body {
+    background: url(../clouds.gif);
+    background-size: 75px;
+    font-family: Arial, sans-serif;
+    background-color: skyblue;
+  }
+  
+  main {
+    margin-top:110px;
+  }
+
+  nav {
+    font-size: 50px;
+    position: fixed;
+    width: 100vw;
+    top: 0;
+    left: 0;
+    background-color: slategrey;
+  }
+  
+  nav h1 {
+    font-size: 1.5em;
+  }
+  
+  nav p {
+    margin-right: 20px;
+  }
+  
+  nav a {
+    color: #bbe1fa;
+    text-decoration: none;
+    margin-left: 20px;
+  }
+  
+  nav a:hover {
+    color: #3282b8;
+  }
+  
+  .nav-right {
+    display: flex;
+    align-items: center;
+  }
+  
+  .nav-right a:first-child::after {
+    content: " | ";
+    margin-left: 10px;
+  }
+  
+  #soundboards-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    padding: 50px;
+    margin-top: 250px;
+  }
+  
+  #soundboard {
+    background-color: #4e4848;
+    margin: 20px;
+    box-shadow: 0px 0px 10px rgba(0,0,0,0.1);
+    height: 200px;
+    width: 200px;
+    overflow: hidden;
+    border: 3px solid chocolate
+  }
+  
+  #soundboard img {
+    width: 200px;
+  }
+  
+  #soundboard ul {
+    list-style-type: none;
+    padding: 10px;
+  }
+  
+  #soundboard-name {
+    color: #1b262c;
+    font-size: 1.2em;
+    margin-bottom: 10px;
+  }
+
+  

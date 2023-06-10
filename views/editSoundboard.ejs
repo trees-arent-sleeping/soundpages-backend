@@ -2,15 +2,35 @@
 <html>
   <head>
     <title>Edit Soundboard</title>
+    <link rel="stylesheet" type="text/css" href="/css/edit.css" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=DotGothic16&display=swap"
+      rel="stylesheet"
+    />
   </head>
   <body>
-    <h1>Edit Soundboard: <%= soundboard.title %></h1>
+    <h1>Edit Soundboard</h1>
     <form
       action="/soundboards/<%= soundboard._id %>?_method=PUT"
       method="POST"
       enctype="multipart/form-data"
     >
-      <h2>Edit Sound Titles and Select Sounds to Delete</h2>
+      <h2>Soundboard Details</h2>
+
+      <label for="title">Soundboard Title:</label><br />
+      <input type="text" name="title" value="<%= soundboard.title %>" /><br />
+
+      <label for="description">Soundboard Description:</label><br />
+      <input
+        type="text"
+        name="description"
+        value="<%= soundboard.description %>"
+      /><br />
+
+      <label for="image">Change Image:</label><br />
+      <input type="file" name="image" /><br />
+
+      <h2>Edit sound titles and select sound to delete</h2>
       <% soundboard.sounds.forEach((sound) => { %>
       <input type="checkbox" name="deleteSounds[]" value="<%= sound._id %>" />
       <input
@@ -19,11 +39,14 @@
         value="<%= sound.title %>"
       /><br />
       <% }); %>
+
       <h2>Add New Sounds</h2>
       <input type="button" value="Add New Sound" onClick="addNewSoundField()" />
       <div id="newSoundsContainer"></div>
+
       <button type="submit">Submit Changes</button>
     </form>
+
     <script>
       function addNewSoundField() {
         var container = document.getElementById("newSoundsContainer");
@@ -37,6 +60,7 @@
         container.appendChild(soundDiv);
       }
     </script>
+
     <h2>Delete Soundboard</h2>
     <form
       action="/soundboards/<%= soundboard._id %>?_method=DELETE"

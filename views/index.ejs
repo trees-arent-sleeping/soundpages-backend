@@ -1,24 +1,50 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
   <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" type="text/css" href="/css/style.css" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=DotGothic16&display=swap"
+      rel="stylesheet"
+    />
     <title>Soundpages</title>
   </head>
   <body>
-    <h1>Soundboards</h1>
-    <% if (user) { %>
-    <p>Welcome, <%= user.username %>! (Logged in with Google)</p>
-    <a href="/logout">Logout</a>
-    <% } else { %>
-    <a href="/auth/google">Login with Google</a>
-    <% } %>
-    <br />
-    <ul>
+    <nav>
+      <h1>Soundpages</h1>
+      <% if (user) { %>
+      <p>Welcome, <%= user.username %>!</p>
+      <div class="nav-right">
+        <a href="/logout">Logout</a>
+        <a href="/soundboards/create">Create New Soundboard</a>
+      </div>
+      <% } else { %>
+      <a href="/auth/google">Login with Google</a>
+      <% } %>
+    </nav>
+
+    <div id="soundboards-container">
       <% soundboards.forEach(soundboard => { %>
-      <li>
-        <a href="/soundboards/<%= soundboard._id %>"><%= soundboard.title %></a>
-      </li>
+      <div id="soundboard">
+        <a href="/soundboards/<%= soundboard._id %>">
+          <% if (soundboard.image && soundboard.image.data) { %>
+          <img
+            src="data:<%= soundboard.image.contentType %>;base64, <%= soundboard.image.data.toString('base64') %>"
+            alt="<%= soundboard.title %>"
+            width="90px"
+            height="90px"
+          />
+          <% } %>
+        </a>
+        <ul>
+          <a href="/soundboards/<%= soundboard._id %>">
+            <li id="soundboard-name"><%= soundboard.title %></li>
+          </a>
+        </ul>
+      </div>
       <% }); %>
-    </ul>
-    <a href="/soundboards/create">Create New Soundboard</a>
+    </div>
   </body>
 </html>

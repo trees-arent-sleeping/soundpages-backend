@@ -2,7 +2,7 @@ const passport = require("passport");
 const express = require("express");
 const router = express.Router();
 const multer = require("multer");
-const User = require("../models/user");
+const User = require("../models/User");
 
 // set up multer storage
 const upload = multer();
@@ -36,10 +36,24 @@ const ensureOwner = async function (req, res, next) {
   }
 };
 
+router.get("/image/:id", async (req, res) => {
+  try {
+    const soundboard = await Soundboard.findById(req.params.id);
+    if (!soundboard || !soundboard.image || !soundboard.image.data) {
+      throw new Error("no image found");
+    }
+    res.contentType(soundboard.image.contentType);
+    res.send(soundboard.image.data);
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("internal server error");
+  }
+});
+
 // index
 router.get("/", async (req, res) => {
   try {
-    const soundboards = await Soundboard.find().select("title").exec();
+    const soundboards = await Soundboard.find().exec();
     res.render("index", { soundboards, user: req.user });
   } catch (err) {
     console.error(err);
@@ -85,8 +99,12 @@ router.post("/soundboards", upload.any(), ensureAuth, async (req, res) => {
     : [req.body.audioTitle];
   const sounds = [];
 
-  if (req.files && req.files.length > 0) {
-    req.files.forEach((file, index) => {
+  const audioFiles = req.files.filter((file) =>
+    file.fieldname.startsWith("audioFiles")
+  );
+
+  if (audioFiles && audioFiles.length > 0) {
+    audioFiles.forEach((file, index) => {
       sounds.push({
         title: audioTitle[index] || file.originalname,
         filename: file.originalname,
@@ -134,15 +152,19 @@ router.get("/soundboards/:id/edit", ensureOwner, async (req, res) => {
 
 // update soundboard
 router.put("/soundboards/:id", upload.any(), ensureOwner, async (req, res) => {
-  const { editTitles, deleteSounds, newTitle, description } = req.body;
+  const { editTitles, deleteSounds, newTitle, description, title } = req.body; // extract title
   const image = req.files.find((file) => file.fieldname === "image");
 
   try {
     const soundboard = await Soundboard.findById(req.params.id);
+    soundboard.title = title; // update title
     soundboard.description = description;
+
     if (image) {
       soundboard.image.data = image.buffer;
-      soundboard.image.contentType = image.mimetype
+      soundboard.image.contentType = image.mimetype;
+    }
+
     if (!soundboard) {
       return res.status(404).send("Soundboard not found");
     }
@@ -165,8 +187,12 @@ router.put("/soundboards/:id", upload.any(), ensureOwner, async (req, res) => {
     }
 
     // add new sounds
-    if (newTitle && req.files && req.files.length > 0) {
-      req.files.forEach((file, index) => {
+    if (newTitle && newTitle.length > 0 && req.files && req.files.length > 0) {
+      const audioFiles = req.files.filter((file) =>
+        file.fieldname.startsWith("audioFile")
+      );
+
+      audioFiles.forEach((file, index) => {
         soundboard.sounds.push({
           title: newTitle[index] || file.originalname,
           filename: file.originalname,
