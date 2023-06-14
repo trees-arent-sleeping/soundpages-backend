@@ -12,39 +12,37 @@
     <title>Soundpages</title>
   </head>
   <body>
-    <nav>
-      <h1>Soundpages</h1>
-      <% if (user) { %>
-      <p>Welcome, <%= user.username %>!</p>
-      <div class="nav-right">
-        <a href="/logout">Logout</a>
-        <a href="/soundboards/create">Create New Soundboard</a>
-      </div>
-      <% } else { %>
-      <a href="/auth/google">Login with Google</a>
-      <% } %>
-    </nav>
-
-    <div id="soundboards-container">
-      <% soundboards.forEach(soundboard => { %>
-      <div id="soundboard">
-        <a href="/soundboards/<%= soundboard._id %>">
-          <% if (soundboard.image && soundboard.image.data) { %>
-          <img
-            src="data:<%= soundboard.image.contentType %>;base64, <%= soundboard.image.data.toString('base64') %>"
-            alt="<%= soundboard.title %>"
-            width="90px"
-            height="90px"
-          />
+    <div class="page-border">
+      <nav>
+        <div class="nav-left">
+          <h1>Soundpages</h1>
+        </div>
+        <div class="nav-right">
+          <% if (user) { %>
+          <p>Welcome, <%= user.username %>!</p>
+          <a href="/logout">Logout</a>
+          <% } else { %>
+          <a href="/auth/google">Login with Google</a>
           <% } %>
-        </a>
-        <ul>
+          <a href="/soundboards/create">Create New Soundboard</a>
+        </div>
+      </nav>
+      <div id="soundboards-container">
+        <% soundboards.forEach(soundboard => { %>
+        <div class="soundboard">
           <a href="/soundboards/<%= soundboard._id %>">
-            <li id="soundboard-name"><%= soundboard.title %></li>
+            <% if (soundboard.image && soundboard.image.data) { %>
+            <img
+              src="data:<%= soundboard.image.contentType %>;base64, <%= soundboard.image.data.toString('base64') %>"
+              alt="<%= soundboard.title %>"
+              class="soundboard-image"
+            />
+            <p class="soundboard-name"><%= soundboard.title %></p>
+            <% } %>
           </a>
-        </ul>
+        </div>
+        <% }); %>
       </div>
-      <% }); %>
     </div>
   </body>
 </html>
