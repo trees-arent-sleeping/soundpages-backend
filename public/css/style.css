@@ -15,8 +15,15 @@
     background-color: #e2cda6;
 }
   
+@keyframes fall {
+    0% { background-position: 0 0; }
+    100% { background-position: 0 -100%; }
+  }
+
 body {
-    background: url(../wood.jpg);
+    background-repeat: repeat-x;
+    animation: fall 25s linear infinite;
+    background: url(../circuits.gif);
     background-size: 64px;
     background-color: skyblue;
 }
@@ -24,8 +31,13 @@ body {
 nav {
     background-color: slategrey;
     border-bottom: 7px solid black;
-    border-radius: 10px 10px 0 0;
+    border-right: 2px inset black;
+    border-left: 2px groove black;
     padding: 10px;
+    position: absolute;
+    width: 80vw;
+    top: 0;
+    left: 10vw;
 }
 
 nav h1 {
@@ -35,10 +47,11 @@ nav h1 {
 
 nav p {
     margin-right: 20px;
+    flex-shrink: 0;
 }
 
+
 nav a {
-    font-size: 16px;
     color: #bbe1fa;
     text-decoration: none;
     margin-left: 20px;
@@ -50,25 +63,66 @@ nav a:hover {
   
 .nav-right {
     display: flex;
+    justify-content: space-between;
     align-items: center;
+    width: 100%;
 }
 
-.nav-right a:first-child::after {
-    content: " | ";
+.links a:first-child::after {
+    content: "| ";
     margin-left: 10px;
 }
 
+.nav-right a:first-child::after {
+    content: "|";
+    margin-left: 10px;
+}
+
+.links {
+    left: 10vw;
+    width: 80vw;
+    background-color: rgb(5, 5, 5);
+}
+
+.links-logged-in {
+    color: #bbe1fa;
+    left: 10vw;
+    width: 80vw;
+    background-color: rgb(5, 5, 5);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+}
+
+.links-logged-in p, .links-logged-in a {
+    margin-left: 10px;
+    margin-right: 0px;
+}
+
+.links-logged-in a:last-child {
+    margin-left: auto;
+    margin-right: 10px;
+}
+
+
 #soundboards-container {
-    background-color: red;
+    border: 3px groove rgba(218, 165, 32, 0.631);
+    border-radius: 2px;
+    color: wheat;
+    padding: 10px;
+    position: absolute;
+    top: 175px;
+    left: 10vw;
+    width: 80vw;
+    background-color: rgba(63, 53, 53, 0.848);
     display: flex;
     flex-wrap: wrap;
-    height: calc(100vh - 200px);
+    height: calc(100vh - 220px);
     overflow: auto;
     justify-content: center;
     align-items: left;
     gap: 10px;
-    width: calc(100% - 20px);
-    margin: 10px;
 }
 
 .soundboard {
@@ -81,14 +135,20 @@ nav a:hover {
 }
 
 .soundboard img {
-    width: 100px;
-    height: 100px;
+    width: 70px;
+    height: 70px;
     object-fit: cover;
     border: 1px solid black;
     border-radius: 5px;
     transition: transform 0.07s ease-in-out;
 }
 
-.soundboard img:hover {
-    transform: scale(1.1);
-}
+  
+  .soundboard img:hover {
+    box-shadow: 2px 2px rgba(56, 47, 12, 0.616);
+  }
+  
+
+:visited {
+    color: inherit;
+  }
