@@ -5,33 +5,45 @@
     <link rel="stylesheet" href="/css/show.css" />
     <link
       href="https://fonts.googleapis.com/css2?family=DotGothic16&display=swap"
-      rel="stylesheet"/>
-  </head>
+      rel="stylesheet"
+    />
+ </head>
   <body>
     <nav>
-      <a href="/">
-        <h1>Soundpages ☏<% if (user) { %> - welcome, <%= user.username %></h1>
-      </a>
-      <div>
-        <a href="/logout">Logout</a> |
-        <a href="/soundboards/create">Create</a> | <% if (user &&
-        soundboard.creator && soundboard.creator.equals(user._id)) { %>
-          <a href="/soundboards/<%= soundboard._id %>/edit">Edit</a>
-        </form>
-        <% } %> <% } else { %>
-        <a href="/auth/google">Login with Google</a>
-        <% } %>
+      <div class="nav-top">
+        <div class="title-image">
+          <% if (soundboard.image.data) { %>
+          <img
+            class="soundboard-image"
+            src="data:<%= soundboard.image.contentType %>;base64, <%= soundboard.image.data.toString('base64') %>"
+            alt="<%= soundboard.title %>"
+          />
+          <% } %>
+          <h1>Soundpages - <%= soundboard.title %></h1>
+        </div>
+      </div>
+      <div class="nav-bottom">
+        <div class="links-logged-in">
+          <% if (user) { %>
+            <div>
+          <a>Welcome, <%= user.username %>!</a>
+          <a href="/soundboards/<%= soundboard._id %>/edit">Edit this Soundboard</a>
+        </div>
+          <div class="nav-right">
+          <a href="/logout">Logout</a>
+          <a href="/">Return to Index</a>
+          </div>
+        </div>
+        <% } else { %>
+        <div class="links">
+          <a href="/auth/google">Login with Google</a>
+          <a href="/">Return to Index</a><% } %>
+        </div>
       </div>
     </nav>
     <main>
       <div class="soundboard-header">
-        <% if (soundboard.image.data) { %>
-        <img
-          class="soundboard-image"
-          src="data:<%= soundboard.image.contentType %>;base64, <%= soundboard.image.data.toString('base64') %>"
-          alt="<%= soundboard.title %>"
-        />
-        <% } %> <% if (username) { %>
+        <% if (username) { %>
         <h2><%= soundboard.title %> - a collection by <%= username %> ☻</h2>
         <% } %>
       </div>
@@ -64,7 +76,6 @@
           </audio>
         </div>
         <% }); %>
-      </div>
     </main>
     <footer>
       <p class="soundboard-description"><%= soundboard.description %></p>
@@ -80,8 +91,8 @@
         let description = document.querySelector(".soundboard-description");
         if (audio.paused) {
           audio.play();
-          item.style.backgroundColor = "#ae9e7f"; // change button color
-          item.style.borderColor = "#9f8f73";
+          item.style.backgroundColor = "#889bbb"; // change button color
+          item.style.borderColor = "#889bbb";
           let completeTitle = document.getElementById("button-" + id).dataset
             .fulltitle;
           let img = document.querySelector(".soundboard-image").cloneNode(true);
@@ -105,8 +116,8 @@
         } else {
           audio.pause();
           audio.currentTime = 0;
-          item.style.backgroundColor = "#e2cda6"; // restore original button color
-          item.style.borderColor = "#bba988";
+          item.style.backgroundColor = "#a6b7e2"; // restore original button color
+          item.style.borderColor = "#889bbb";
           // remove sound ID from playing array
           let index = playingSounds.indexOf(id);
           if (index > -1) {
@@ -121,8 +132,8 @@
         }
         // when audio has stopped playing
         audio.addEventListener("ended", function () {
-          item.style.backgroundColor = "#F5DEB3"; // restore original button color
-          item.style.borderColor = "#d0bc97";
+          item.style.backgroundColor = "#a6b7e2"; // restore original button color
+          item.style.borderColor = "#889bbb";
           // remove sound id from playing sounds id
           let index = playingSounds.indexOf(id);
           if (index > -1) {

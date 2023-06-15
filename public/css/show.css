@@ -1,31 +1,89 @@
 * {
     font-family: 'DotGothic16', sans-serif;
     font-weight: 100;
+    cursor: url(../normal.cur), auto !important;
   }
   
   main {
     margin-top:150px;
   }
-
+  
   nav {
-    color: 1b262c;
-    font-size: 18px;
+    font-size: small;
+    background-color: slategrey;
+    border-bottom: 7px solid rgb(255, 255, 255);
+    border-right: 2px inset black;
+    border-left: 2px groove black;
+    padding: 10px;
     position: absolute;
     width: 80vw;
     top: 0;
     left: 10vw;
-    background-color: slategrey;
-  }
+}
 
-  nav h1 {
+nav h1 {
     margin-left: 10px;
-    text-decoration: underline;
-  }
+    font-size: 25px;
+    text-shadow: 1px 1px black;
+}
 
-  nav div {
+nav p {
+    margin-right: 20px;
+    flex-shrink: 0;
+}
+
+
+nav a {
+    color: #bbe1fa;
+    text-decoration: none;
+    margin-left: 20px;
+}
+
+nav a:hover {
+    color: #3282b8;
+}
+  
+.nav-bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+}
+
+.links-logged-in .edit {
     margin-left: 10px;
-  }
+}
 
+.nav-bottom a:first-child::after {
+    content: " | ";
+}
+
+.links {
+    left: 10vw;
+    width: 80vw;
+    background-color: rgb(5, 5, 5);
+}
+
+.links-logged-in {
+    color: #bbe1fa;
+    left: 10vw;
+    width: 80vw;
+    background-color: rgb(5, 5, 5);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+}
+
+.links-logged-in p, .links-logged-in a {
+    margin-left: 10px;
+    margin-right: 0px;
+}
+
+.links-logged-in a:last-child {
+    margin-left: auto;
+    margin-right: 10px;
+}
 
   body {
     font-family: Arial, sans-serif;
@@ -47,7 +105,18 @@
     color:rgba(220, 20, 60, 0.796);
     background-color: #3282b8;
   }
+
+  .title-image {
+    display: flex;
+    align-items: center;
+  }
   
+  .title-image img {
+    width: 60px;
+    height: 60px;
+    border: 3px groove rgb(0, 0, 0);
+    margin-left: 15px;
+  }
 
   .soundboard-header h2 {
     font-size: 18px;
@@ -61,22 +130,20 @@
   }
 
   .sounds-grid {
-    box-sizing: border-box;
-    background-color: rgba(26, 135, 26, 0.947);
+    background-image: url(../circuits.gif);
+    background-color: rgb(0, 0, 0);
     box-shadow: 2px 3px rgba(0, 0, 0, 0.464);
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
     gap: 44px;
     padding: 20px;
-    position: sticky;
-    right: 39%;
-    left:9%;
-    border: 6px groove rgb(97, 52, 20);
+    border: 3px groove rgb(97, 52, 20);
     border-right: 6px solid rgb(66, 75, 84);
     border-left: 6px solid rgb(66, 75, 84);
-    width: 80vw;
-    margin-left: auto;
-    margin-right: auto;
+    width: 77vw;
+    margin-left: 10vw;
+    cursor: url(../bored.cur), auto !important;
+    min-height: 30vw;
   }
   
   
@@ -85,9 +152,9 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    border: 4px groove #bba988;
-    border-radius: 10px;
-    background-color: #e2cda6;
+    border: 4px groove #889bbb;
+    border-radius: 12px 50px 50px 50px;
+    background-color: #a6b7e2;
     font-weight: bolder;
     justify-content: space-between;
     margin-bottom: 20px;
@@ -96,7 +163,7 @@
     aspect-ratio: 1 / 1;
     min-width: 70px;
     max-width: 100px;
-    box-shadow: 3px 3px rgba(1, 86, 86, 0.783);
+    box-shadow: 3px 3px rgba(86, 34, 1, 0.783);
     overflow: hidden;
   }
   
@@ -104,17 +171,24 @@
     border: 5px inset #ffffff;
     border-radius: 3px;
   }
+
+  .soundboard-header h2 {
+    position:static;
+    text-shadow: 1px 1px slategray;
+  }
   
   .sound-button {
+    text-transform: uppercase;
+    cursor: url(../stim.cur), auto !important;
     width: 100%;
     background-color: transparent;
-    color: #333;
+    color: #282727;
     border: none;
-    text-shadow: 1px 1px #bba9886f;
+    text-shadow: 0px 1px #6c7b95;
     padding: 10px;
     cursor: pointer;
     text-align: center;
-    font-size: 0.9em;
+    font-size: 12px;
     flex-grow: 1;
     display: flex;
     align-items: flex-end;
@@ -124,10 +198,11 @@
   }
   
   .key-bind {
+    border: 2px groove #6a7892;
     position: absolute;
     top: 5px;
     left: 5px;
-    background-color: rgba(255, 255, 255, 0.8);
+    background-color: rgba(85, 85, 85, 0.409);
     padding: 2px 4px;
     border-radius: 3px;
     font-weight: bold;
@@ -138,17 +213,18 @@
   .key-bind input {
     width: 16px;
     text-align: center;
-    box-shadow: 1px 2px rgb(0, 128, 128);
-    text-shadow: 2px 2px rgba(0, 128, 128, 0.599);
-    background-color: #89c7f155;
-    color: black;
+    box-shadow: 1px 2px rgb(113, 96, 1);
+    text-shadow: 2px 2px rgba(152, 151, 151, 0.599);
+    background-color: #282727;
+    color: rgb(255, 255, 255);
     font-weight: bolder;
     border-style: hidden;
     border-radius: 3px;
   }
-  
+
   
   .key-bind span {
+    
     background-color: #f0f0f0;
     padding: 2px 4px;
     border-radius: 3px;
@@ -156,22 +232,26 @@
     font-size: 12px;
   }
 
+  
   footer {
+    position: absolute;
     z-index: 2;
-    position: fixed;
     bottom: 0;
-    left: 50%;
-    transform: translateX(-50%);
+    background-color: rgb(0, 0, 0);
+    /* background: url(../marble.gif); */
+    /* background-size: 18px; */
+    border: 2px solid red;
+    width: 80vw;
+    padding: 10px;
+    left: 10vw;
   }
 
   .soundboard-description {
     text-align: center;
-    width: 100vw;
-    font-size: 22px;
-    color: black;
-    margin: 10px 20vw 0 20vw;
-    width: 80vw;
-    background-color: slategrey;
+    font-size: 20px;
+    color: #eef4ef;
+    border-top: 5px solid rgb(0, 0, 0);
+    background-color: rgb(0, 0, 0);
   }
 
   .speaker {
@@ -179,7 +259,8 @@
   }
 
   .speaker img{
-    border: 3px solid black;
+    filter:contrast(200%);
+    border: 1px groove #aaf4b1;
     width: 22px;
     height: 22px;
     margin-right: 10px
