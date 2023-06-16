@@ -28,7 +28,9 @@ const ensureOwner = async function (req, res, next) {
     if (req.user && soundboard.creator.equals(req.user._id)) {
       return next();
     } else {
-      res.status(403).send("forbidden");
+      res
+        .status(403)
+        .send("Please try logging in before editing this soundboard");
     }
   } catch (err) {
     console.error(err);
@@ -80,9 +82,7 @@ router.get("/soundboards/:id", async (req, res) => {
         model: User,
         select: "username",
       });
-
     const username = soundboard.creator ? soundboard.creator.username : "Guest";
-
     res.render("soundboard", { soundboard, username, user: req.user });
   } catch (err) {
     console.error(err);
@@ -98,11 +98,9 @@ router.post("/soundboards", upload.any(), ensureAuth, async (req, res) => {
     ? req.body.audioTitle
     : [req.body.audioTitle];
   const sounds = [];
-
   const audioFiles = req.files.filter((file) =>
     file.fieldname.startsWith("audioFiles")
   );
-
   if (audioFiles && audioFiles.length > 0) {
     audioFiles.forEach((file, index) => {
       sounds.push({
@@ -128,7 +126,6 @@ router.post("/soundboards", upload.any(), ensureAuth, async (req, res) => {
       sounds,
       creator: req.user._id,
     });
-
     await soundboard.save();
     res.redirect("/");
   } catch (err) {
@@ -152,46 +149,50 @@ router.get("/soundboards/:id/edit", ensureOwner, async (req, res) => {
 
 // update soundboard
 router.put("/soundboards/:id", upload.any(), ensureOwner, async (req, res) => {
-  const { editTitles, deleteSounds, newTitle, description, title } = req.body; // extract title
+  const { editTitles, deleteSounds, newTitle, description, title } = req.body;
   const image = req.files.find((file) => file.fieldname === "image");
-
   try {
     const soundboard = await Soundboard.findById(req.params.id);
-    soundboard.title = title; // update title
+    soundboard.title = title;
     soundboard.description = description;
-
     if (image) {
       soundboard.image.data = image.buffer;
       soundboard.image.contentType = image.mimetype;
     }
-
     if (!soundboard) {
       return res.status(404).send("Soundboard not found");
     }
-
-    // update existing sound titles
+    // update existing sound titles and sound files
     if (editTitles) {
       for (const soundId in editTitles) {
         const sound = soundboard.sounds.id(soundId);
         if (sound) {
           sound.title = editTitles[soundId];
+          // find updated sound file in request
+          const updatedSound = req.files.find(
+            (file) => file.fieldname === `editSounds[${soundId}]`
+          );
+          // if found, update the sound file
+          if (updatedSound) {
+            sound.filename = updatedSound.originalname;
+            sound.contentType = updatedSound.mimetype;
+            sound.fileSize = updatedSound.size;
+            sound.buffer = updatedSound.buffer;
+          }
         }
       }
     }
-
     // delete selected sounds
     if (deleteSounds) {
       deleteSounds.forEach((soundId) => {
         soundboard.sounds.pull(soundId);
       });
     }
-
     // add new sounds
     if (newTitle && newTitle.length > 0 && req.files && req.files.length > 0) {
       const audioFiles = req.files.filter((file) =>
         file.fieldname.startsWith("audioFile")
       );
-
       audioFiles.forEach((file, index) => {
         soundboard.sounds.push({
           title: newTitle[index] || file.originalname,
@@ -204,9 +205,8 @@ router.put("/soundboards/:id", upload.any(), ensureOwner, async (req, res) => {
         });
       });
     }
-
     await soundboard.save();
-    res.redirect(`/soundboards/${req.params.id}`);
+    res.redirect(`/soundboards/${req.params.id}/edit`);
   } catch (err) {
     console.error(err);
     res.status(500).send("internal server error");

@@ -18,14 +18,14 @@
 @keyframes fall {
     0% { background-position: 0 0; }
     100% { background-position: 0 -100%; }
-  }
+}
 
 body {
     background-repeat: repeat-x;
     animation: fall 25s linear infinite;
     background: url(../circuits.gif);
     background-size: 64px;
-    background-color: skyblue;
+    background-color: rgb(0, 0, 0);
 }
 
 nav {
@@ -43,7 +43,7 @@ nav {
 nav h1 {
     /* margin-left: 10px;
     font-size: 25px; */
-    margin-left: 93px;
+    margin-left: 103px;
     transform: scale(1.2);
     font-size: 25px;
     text-shadow: 1px 1px rgb(197, 197, 197);
@@ -152,12 +152,11 @@ nav a:hover {
     transition: transform 0.07s ease-in-out;
 }
 
-  
-  .soundboard img:hover {
+.soundboard img:hover {
     box-shadow: 1px 1px rgba(174, 55, 55, 0.599);
-  }
+}
   
 
 :visited {
     color: inherit;
-  }
+}

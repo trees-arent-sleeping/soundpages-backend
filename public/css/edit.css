@@ -1,4 +1,105 @@
 * {
-    font-family: 'DotGothic16', sans-serif;
-    font-weight: 100;
-  }
+  font-family: 'DotGothic16', sans-serif;
+  font-weight: 100;
+}
+
+h1 {
+  text-shadow: 1px 1px rgba(133, 49, 49, 0.368);
+}
+
+nav {
+  font-size: small;
+  background-color: slategrey;
+  border-bottom: 7px solid rgb(255, 255, 255);
+  border-right: 2px inset black;
+  border-left: 2px groove black;
+  padding: 10px;
+  position: absolute;
+  width: 80vw;
+  top: 0;
+  left: 10vw;
+}
+
+.edit-container {
+  background-image: url(../circuits.gif);
+  background-color: rgb(0, 0, 0);
+  box-shadow: 2px 3px rgba(0, 0, 0, 0.464);
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 44px;
+  padding: 20px;
+  border: 3px groove rgb(97, 52, 20);
+  border-right: 6px solid rgb(66, 75, 84);
+  border-left: 6px solid rgb(66, 75, 84);
+  width: 77vw;
+  margin-left: 8.5vw;
+  min-height: 30vw;
+}
+
+.edit-item {
+  font-size: 14px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  font-weight: bolder;
+  margin-bottom: 20px;
+  position: relative;
+  padding: 10px;
+  overflow: visible;;
+}
+
+.button-display {
+  position: relative;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 10px;
+}
+
+.yes {
+  border: 4px groove #889bbb;
+  border-radius: 12px 50px 50px 50px;
+  background-color: #a6b7e2;
+  width: 90px;
+  aspect-ratio: 1/1;
+  box-shadow: 3px 3px rgba(86, 34, 1, 0.783);
+}
+
+.edit-item input[type="text"] {
+  width: 175px;
+  margin-top: 10px;
+}
+
+.edit-item input[type="file"] {
+  width: 180px;
+  background-color: rgb(216, 196, 159);
+  
+}
+.button-check {
+  position:inherit;
+  top:-100px;
+  left: -30px;
+  outline: none;
+  transform: scale(1.4);
+  border: 1px solid black;
+  transition: box-shadow 0.3s;
+}
+
+.button-check:before {
+  content: "";
+  display: block;
+  transform: none;
+  background-color: #6c7b958e;
+}
+
+.button-check:checked:before {
+  width: 3em;
+  font-size: 10px;
+  content: "REMOVE";
+  color: rgb(217, 217, 217);
+  background-color: rgb(230, 72, 72);
+  /* box-shadow: 1px 1px rgb(98, 98, 98); */
+  transform: scale(1);
+}

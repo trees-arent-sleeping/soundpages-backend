@@ -5,68 +5,106 @@
     <link rel="stylesheet" type="text/css" href="/css/edit.css" />
     <link
       href="https://fonts.googleapis.com/css2?family=DotGothic16&display=swap"
-      rel="stylesheet"
-    />
+      rel="stylesheet"/>
   </head>
   <body>
-    <h1>Edit Soundboard</h1>
+    <h1>Editing <%= soundboard.title %></h1>
+    <hr>
     <form
       action="/soundboards/<%= soundboard._id %>?_method=PUT"
       method="POST"
-      enctype="multipart/form-data"
-    >
-      <h2>Soundboard Details</h2>
-
-      <label for="title">Soundboard Title:</label><br />
-      <input type="text" name="title" value="<%= soundboard.title %>" /><br />
-
-      <label for="description">Soundboard Description:</label><br />
-      <input
-        type="text"
-        name="description"
-        value="<%= soundboard.description %>"
-      /><br />
-
-      <label for="image">Change Image:</label><br />
-      <input type="file" name="image" /><br />
-
-      <h2>Edit sound titles and select sound to delete</h2>
-      <% soundboard.sounds.forEach((sound) => { %>
-      <input type="checkbox" name="deleteSounds[]" value="<%= sound._id %>" />
-      <input
-        type="text"
-        name="editTitles[<%= sound._id %>]"
-        value="<%= sound.title %>"
-      /><br />
-      <% }); %>
-
-      <h2>Add New Sounds</h2>
-      <input type="button" value="Add New Sound" onClick="addNewSoundField()" />
+      enctype="multipart/form-data">
+      <div class="grid-container">
+        <div class="grid-item">
+          <label for="title">Title:</label>
+          <br/>
+          <input
+            type="text"
+            name="title"
+            value="<%= soundboard.title %>"/>
+            <br />
+        </div>
+        <div class="grid-item">
+          <label for="description">Description:</label>
+          <br />
+          <input
+            type="text"
+            name="description"
+            value="<%= soundboard.description %>"/>
+            <br />
+        </div>
+        <div class="grid-item">
+          <label for="image">Image:</label><br />
+          <input type="file" name="image" /><br />
+        </div>
+      </div>
+      <h2>Edit buttons and select button to delete</h2>
+      <div class="edit-container">
+        <% soundboard.sounds.forEach((sound) => { %>
+        <div class="edit-item">
+          <p class="yes"></p>
+          <input
+            class="button-check"
+            type="checkbox"
+            name="deleteSounds[]"
+            value="<%= sound._id %>"
+            onchange="hideInfo(this)"/>
+          <input
+            class="edit-input"
+            type="text"
+            name="editTitles[<%= sound._id %>]"
+            value="<%= sound.title %>"/>
+          <input class="edit-input" type="file" name="editSounds[<%= sound._id %>]" />
+        </div>
+        <% }); %>
+      </div>
+      <h2>Add more buttons</h2>
       <div id="newSoundsContainer"></div>
-
-      <button type="submit">Submit Changes</button>
+      <div class="button-container">
+        <input
+          type="button"
+          value="Add New Sound"
+          onClick="addNewSoundField()"
+        />
+      </div>
+    </br>
+    <hr>
+    <button type="submit">Submit Changes</button>
+    <a href="/soundboards/<%= soundboard._id %>">
+      <button type="button">Return to Soundboard</button>
+    </a>
     </form>
-
     <script>
       function addNewSoundField() {
-        var container = document.getElementById("newSoundsContainer");
-        var soundDiv = document.createElement("div");
+        let container = document.getElementById("newSoundsContainer");
+        let soundDiv = document.createElement("div");
         soundDiv.innerHTML = `
-          <label for="title">Sound Title:</label><br />
-          <input type="text" name="newTitle[]" /><br />
-          <label for="audioFile">Sound File:</label><br />
-          <input type="file" name="audioFile[]" /><br />
-        `;
+          <div class="sound">
+            <label for="title">Title:</label><br />
+            <input type="text" name="newTitle[]" />
+            <label for="audioFile"></label>
+            <input type="file" name="audioFile[]" />
+          </div>
+          </br>`;
         container.appendChild(soundDiv);
       }
+      function hideInfo(checkbox) {
+        let inputs = checkbox.parentElement.getElementsByClassName('edit-input');
+        for (let i = 0; i < inputs.length; i++) {
+          if (checkbox.checked) {
+            inputs[i].style.display = "none";
+          } else {
+            inputs[i].style.display = "";
+          }
+        }
+      }
     </script>
-
-    <h2>Delete Soundboard</h2>
     <form
       action="/soundboards/<%= soundboard._id %>?_method=DELETE"
-      method="POST"
-    >
-      <button type="submit">Delete Soundboard</button>
+      method="POST">
+      <div class="button-container">
+        <button type="submit">Delete Soundboard</button>
+      </div>
     </form>
   </body>
 </html>

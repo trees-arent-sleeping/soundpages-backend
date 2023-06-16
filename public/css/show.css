@@ -2,13 +2,13 @@
     font-family: 'DotGothic16', sans-serif;
     font-weight: 100;
     cursor: url(../normal.cur), auto !important;
-  }
+}
   
-  main {
+main {
     margin-top:150px;
-  }
+}
   
-  nav {
+nav {
     font-size: small;
     background-color: slategrey;
     border-bottom: 7px solid rgb(255, 255, 255);
@@ -85,49 +85,50 @@ nav a:hover {
     margin-right: 10px;
 }
 
-  body {
+body {
     font-family: Arial, sans-serif;
+    background-color: black;
     background: url(../show.gif);
     margin: 0;
     padding: 0;
     color: white;
-  }
+}
   
-  .soundboard-header {
+.soundboard-header {
     text-align: center;
-  }
+}
   
-  .soundboard-header h1{
+.soundboard-header h1{
     color: black;
     border: 10px ridge rgb(97, 52, 20);
     border-radius: 25px;
     margin: 30px 30% 10px 30%;
     color:rgba(220, 20, 60, 0.796);
     background-color: #3282b8;
-  }
+}
 
-  .title-image {
+.title-image {
     display: flex;
     align-items: center;
-  }
+}
   
-  .title-image img {
+.title-image img {
     width: 60px;
     height: 60px;
     border: 3px groove rgb(0, 0, 0);
     margin-left: 15px;
-  }
+}
 
-  .soundboard-header h2 {
+.soundboard-header h2 {
     font-size: 18px;
     margin: 30px 30% 10px 30%;
     color:white;
-  }
+}
   
-  .soundboard-image {
+.soundboard-image {
     width: 100px;
     height: 100px;
-  }
+}
 
   .sounds-grid {
     background-image: url(../circuits.gif);
@@ -144,10 +145,9 @@ nav a:hover {
     margin-left: 10vw;
     cursor: url(../bored.cur), auto !important;
     min-height: 30vw;
-  }
-  
-  
-  .sound-item {
+}
+   
+.sound-item {
     font-size: 14px;
     display: flex;
     flex-direction: column;
@@ -155,6 +155,7 @@ nav a:hover {
     border: 4px groove #889bbb;
     border-radius: 12px 50px 50px 50px;
     background-color: #a6b7e2;
+    box-shadow: 3px 3px rgba(86, 34, 1, 0.783);
     font-weight: bolder;
     justify-content: space-between;
     margin-bottom: 20px;
@@ -163,21 +164,20 @@ nav a:hover {
     aspect-ratio: 1 / 1;
     min-width: 70px;
     max-width: 100px;
-    box-shadow: 3px 3px rgba(86, 34, 1, 0.783);
     overflow: hidden;
-  }
+}
   
-  .soundboard-header img {
+.soundboard-header img {
     border: 5px inset #ffffff;
     border-radius: 3px;
-  }
+}
 
-  .soundboard-header h2 {
+.soundboard-header h2 {
     position:static;
     text-shadow: 1px 1px slategray;
-  }
+}
   
-  .sound-button {
+.sound-button {
     text-transform: uppercase;
     cursor: url(../stim.cur), auto !important;
     width: 100%;
@@ -195,9 +195,9 @@ nav a:hover {
     justify-content: center;
     position: relative;
     z-index: 1;
-  }
+}
   
-  .key-bind {
+.key-bind {
     border: 2px groove #6a7892;
     position: absolute;
     top: 5px;
@@ -208,9 +208,9 @@ nav a:hover {
     font-weight: bold;
     font-size: 12px;
     z-index: 2;
-  }
+}
   
-  .key-bind input {
+.key-bind input {
     width: 16px;
     text-align: center;
     box-shadow: 1px 2px rgb(113, 96, 1);
@@ -220,20 +220,19 @@ nav a:hover {
     font-weight: bolder;
     border-style: hidden;
     border-radius: 3px;
-  }
+}
 
   
-  .key-bind span {
-    
+.key-bind span {
     background-color: #f0f0f0;
     padding: 2px 4px;
     border-radius: 3px;
     font-weight: bold;
     font-size: 12px;
-  }
+}
 
   
-  footer {
+footer {
     position: absolute;
     z-index: 2;
     bottom: 0;
@@ -244,28 +243,28 @@ nav a:hover {
     width: 80vw;
     padding: 10px;
     left: 10vw;
-  }
+}
 
-  .soundboard-description {
+.soundboard-description {
     text-align: center;
     font-size: 20px;
     color: #eef4ef;
     border-top: 5px solid rgb(0, 0, 0);
     background-color: rgb(0, 0, 0);
-  }
+}
 
-  .speaker {
+.speaker {
     margin-left: 40px;
-  }
+}
 
-  .speaker img{
+.speaker img{
     filter:contrast(200%);
     border: 1px groove #aaf4b1;
     width: 22px;
     height: 22px;
     margin-right: 10px
-  }
+}
   
-  :visited {
+:visited {
     color: inherit;
-  }
+}
