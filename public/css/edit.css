@@ -103,3 +103,7 @@ nav {
   /* box-shadow: 1px 1px rgb(98, 98, 98); */
   transform: scale(1);
 }
+
+.marg {
+  margin-bottom: 17px;
+}

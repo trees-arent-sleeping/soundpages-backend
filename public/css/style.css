@@ -160,3 +160,7 @@ nav a:hover {
 :visited {
     color: inherit;
 }
+
+.marg {
+    margin-bottom: 17px;
+}

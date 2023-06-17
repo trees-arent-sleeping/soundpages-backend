@@ -19,13 +19,15 @@
 
       <label for="image">Image:</label><br />
       <input type="file" id="image" name="image" /><br />
-
-      <div id="audiosContainer">
-        <div class="audioContainer">
-          <label for="audioTitle">Audio Title:</label><br />
-          <input type="text" class="audioTitle" name="audioTitle[]" /><br />
-          <label for="audioFiles">Audio:</label><br />
-          <input type="file" class="audioFile" name="audioFiles[]" /><br />
+      <br />
+      <div id="newSoundsContainer">
+        <div class="marg">
+          <input
+            type="text"
+            class="audioTitle"
+            placeholder="TITLE"
+            name="audioTitle[]"
+          />———<input type="file" class="audioFile" name="audioFiles[]" />
         </div>
       </div>
       <button type="button" id="addAudio">Add another audio file</button><br />
@@ -36,13 +38,12 @@
       document
         .getElementById("addAudio")
         .addEventListener("click", function () {
-          var audiosContainer = document.getElementById("audiosContainer");
-          var newAudioInput = document.createElement("div");
-
-          newAudioInput.className = "audioContainer";
-          newAudioInput.innerHTML =
-            '<label for="audioTitle">Audio Title:</label><br /><input type="text" class="audioTitle" name="audioTitle[]" /><br /><label for="audioFiles">Audio:</label><br /><input type="file" class="audioFile" name="audioFiles[]" /><br />';
-          audiosContainer.appendChild(newAudioInput);
+          let newSoundsContainer =
+            document.getElementById("newSoundsContainer");
+          let soundDiv = document.createElement("div");
+          soundDiv.innerHTML =
+            '<div class="marg"><input type="text" class="audioTitle" name="audioTitle[]" placeholder="TITLE"/>———<input type="file" class="audioFile" name="audioFiles[]" /></div>';
+          newSoundsContainer.appendChild(soundDiv);
         });
     </script>
   </body>
