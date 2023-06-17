@@ -4,7 +4,7 @@ const methodOverride = require("method-override");
 const multer = require("multer");
 const mongoose = require("mongoose");
 const path = require("path");
-const passport = require("passport");
+const passport = require("./config/passport");
 const session = require("express-session");
 const crypto = require("crypto");
 

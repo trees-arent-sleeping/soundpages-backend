@@ -24,12 +24,20 @@ passport.use(
       if (user) {
         done(null, user);
       } else {
-        user = await User.create({
+        user = new User({
           googleId: profile.id,
           username: profile.displayName,
         });
-        done(null, user);
+
+        try {
+          await user.save();
+          done(null, user);
+        } catch (err) {
+          console.error(err);
+        }
       }
     }
   )
 );
+
+module.exports = passport;
