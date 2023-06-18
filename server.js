@@ -1,5 +1,6 @@
 require("dotenv").config();
 const express = require("express");
+const cors = require("cors");
 const methodOverride = require("method-override");
 const multer = require("multer");
 const mongoose = require("mongoose");
@@ -14,7 +15,27 @@ const Soundboard = require("./models/Soundboard");
 require("./config/passport");
 
 const app = express();
+app.use(
+  cors({
+    origin: "http://localhost:3001",
+    credentials: true,
+  })
+);
+
 const PORT = 3000;
+
+// session middleware
+app.use(
+  session({
+    secret: process.env.GOOGLE_CLIENT_SECRET,
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+      secure: false,
+      maxAge: 24 * 60 * 60 * 1000, // 1 day
+    },
+  })
+);
 
 // set up multer storage
 const upload = multer();
@@ -25,6 +46,10 @@ app.use(express.urlencoded({ extended: true }));
 app.set("view engine", "ejs");
 app.use(express.static(path.join(__dirname, "public")));
 app.use(methodOverride("_method"));
+
+// passport middleware
+app.use(passport.initialize());
+app.use(passport.session());
 
 // connect to mongo
 mongoose.connect(process.env.MONGO_URI, {
@@ -298,6 +323,43 @@ app.get("/sounds/:uniqueID", async (req, res) => {
     res.status(500).send("internal server error");
   }
 });
+
+// get soundboards as json
+app.get("/soundboards", async (req, res) => {
+  try {
+    const soundboards = await Soundboard.find().exec();
+    res.json(soundboards);
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("internal server error");
+  }
+});
+
+// get user information as json
+app.get("/user", (req, res) => {
+  if (req.isAuthenticated()) {
+    res.json(req.user);
+  } else {
+    res.json(null);
+  }
+});
+
+// get image data as json
+app.get("/image/:id", async (req, res) => {
+  try {
+    const soundboard = await Soundboard.findById(req.params.id);
+    if (!soundboard || !soundboard.image || !soundboard.image.data) {
+      throw new Error("no image found");
+    }
+    res.contentType(soundboard.image.contentType);
+    res.send(soundboard.image.data);
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("internal server error");
+  }
+});
+
+////////////
 
 // connect to mongo
 const db = mongoose.connection;
