@@ -18,6 +18,7 @@ const app = express();
 app.use(
   cors({
     origin: "http://localhost:3001",
+    methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true,
   })
 );
@@ -57,6 +58,13 @@ mongoose.connect(process.env.MONGO_URI, {
   useUnifiedTopology: true,
 });
 
+// connect to mongo
+const db = mongoose.connection;
+db.on("error", console.error.bind(console, "mongoDB connection error:"));
+db.once("open", () => {
+  console.log("connected to MongoDB");
+});
+
 // session config
 app.use(
   session({
@@ -91,7 +99,7 @@ const ensureOwner = async function (req, res, next) {
     } else {
       res
         .status(403)
-        .send("Please try logging in before editing this soundboard");
+        .send("please try logging in before editing this soundboard");
     }
   } catch (err) {
     console.error(err);
@@ -283,17 +291,19 @@ app.get(
   passport.authenticate("google", { scope: ["profile", "email"] })
 );
 
+// refactored to redirect to frontend
+
 app.get(
   "/auth/google/callback",
   passport.authenticate("google", { failureRedirect: "/login" }),
   (req, res) => {
-    res.redirect("/"); // redirect after login
+    res.redirect("http://localhost:3001/"); // redirect after login
   }
 );
 
 app.get("/logout", (req, res) => {
   req.logout(() => {
-    res.redirect("/");
+    res.redirect("http://localhost:3001/");
   });
 });
 
@@ -323,8 +333,6 @@ app.get("/sounds/:uniqueID", async (req, res) => {
     res.status(500).send("internal server error");
   }
 });
-
-/// REFACTORED MERN ROUTES
 
 // get soundboards for index as json
 app.get("/soundboards", async (req, res) => {
@@ -390,15 +398,6 @@ app.get("/image/:id", async (req, res) => {
     console.error(err);
     res.status(500).send("internal server error");
   }
-});
-
-////////////
-
-// connect to mongo
-const db = mongoose.connection;
-db.on("error", console.error.bind(console, "mongoDB connection error:"));
-db.once("open", () => {
-  console.log("connected to MongoDB");
 });
 
 // start the server
