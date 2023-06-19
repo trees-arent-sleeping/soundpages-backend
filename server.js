@@ -324,11 +324,44 @@ app.get("/sounds/:uniqueID", async (req, res) => {
   }
 });
 
-// get soundboards as json
+/// REFACTORED MERN ROUTES
+
+// get soundboards for index as json
 app.get("/soundboards", async (req, res) => {
   try {
-    const soundboards = await Soundboard.find().exec();
+    // grab only the title and image. reduce load speeds
+    const soundboards = await Soundboard.find().select("_id title").exec();
     res.json(soundboards);
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("internal server error");
+  }
+});
+
+// get one soundboard as json
+app.get("/soundboard/:id", async (req, res) => {
+  try {
+    const soundboard = await Soundboard.findById(req.params.id).exec();
+    if (!soundboard) {
+      return res.status(404).json({ message: "soundboard not found" });
+    }
+    res.json(soundboard);
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("internal server error");
+  }
+});
+
+// get soundboard img
+app.get("/image/:id", async (req, res) => {
+  try {
+    const soundboard = await Soundboard.findById(req.params.id).exec();
+    if (!soundboard || !soundboard.image) {
+      return res.status(404).json({ message: "image not found" });
+    }
+
+    res.set("Content-Type", soundboard.image.contentType);
+    res.send(soundboard.image.data);
   } catch (err) {
     console.error(err);
     res.status(500).send("internal server error");
