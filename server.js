@@ -111,43 +111,6 @@ const ensureOwner = async function (req, res, next) {
   }
 };
 
-// index
-app.get("/", async (req, res) => {
-  try {
-    const soundboards = await Soundboard.find().exec();
-    res.render("index", { soundboards, user: req.user });
-  } catch (err) {
-    console.error(err);
-    res.status(500).send("internal server error");
-  }
-});
-
-// create soundboard form
-app.get("/soundboards/create", ensureAuth, (req, res) => {
-  if (req.isAuthenticated()) {
-    res.render("createSoundboard");
-  } else {
-    res.redirect("/auth/google"); // redirect to login if user isn't logged in
-  }
-});
-
-// view soundboard
-app.get("/soundboards/:id", async (req, res) => {
-  try {
-    const soundboard = await Soundboard.findById(req.params.id)
-      .populate("sounds")
-      .populate({
-        path: "creator",
-        model: User,
-        select: "username",
-      });
-    const username = soundboard.creator ? soundboard.creator.username : "Guest";
-    res.render("soundboard", { soundboard, username, user: req.user });
-  } catch (err) {
-    console.error(err);
-    res.status(500).send("internal server error");
-  }
-});
 // create soundboard
 app.post("/soundboards", upload.any(), ensureAuth, async (req, res) => {
   const { title, description } = req.body;
@@ -186,19 +149,6 @@ app.post("/soundboards", upload.any(), ensureAuth, async (req, res) => {
     });
     await soundboard.save();
     res.redirect("/");
-  } catch (err) {
-    console.error(err);
-    res.status(500).send("internal server error");
-  }
-});
-
-// edit soundboard form
-app.get("/soundboards/:id/edit", ensureOwner, async (req, res) => {
-  try {
-    const soundboard = await Soundboard.findById(req.params.id).populate(
-      "sounds"
-    );
-    res.render("editSoundboard", { soundboard });
   } catch (err) {
     console.error(err);
     res.status(500).send("internal server error");
