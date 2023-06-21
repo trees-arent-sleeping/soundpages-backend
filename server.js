@@ -111,6 +111,11 @@ const ensureOwner = async function (req, res, next) {
   }
 };
 
+// create soundboard, authenticate first
+app.get("/soundboards/create", ensureAuth, (req, res) => {
+  res.redirect("http://localhost:3001/soundboards/create");
+});
+
 // create soundboard
 app.post("/soundboards", upload.any(), ensureAuth, async (req, res) => {
   const { title, description } = req.body;
