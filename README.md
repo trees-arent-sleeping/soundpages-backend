@@ -1,5 +1,5 @@
 # Soundpages
-![image](https://github.com/trees-arent-sleeping/soundpages/assets/117592107/cf1c0b5e-7383-4d01-8249-12e4661b458e)
+![image](https://github.com/trees-arent-sleeping/soundpages-backend/assets/117592107/890ce263-dea5-4583-a07b-08c20d32a0e6)
 
 Soundpages is a web application that allows users to create soundboards inspired by the design aesthetics of MySpace and websites from the late 90s. Users can create soundboards and upload sounds into them, which can then be accessed and played by other users.
 
