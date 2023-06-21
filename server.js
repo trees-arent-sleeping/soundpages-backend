@@ -1,6 +1,11 @@
 require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
+const corsOptions = {
+  origin: "http://localhost:3001",
+  credentials: true,
+};
+
 const methodOverride = require("method-override");
 const multer = require("multer");
 const mongoose = require("mongoose");
@@ -15,13 +20,12 @@ const Soundboard = require("./models/Soundboard");
 require("./config/passport");
 
 const app = express();
-app.use(
-  cors({
-    origin: "http://localhost:3001",
-    methods: ["GET", "POST", "PUT", "DELETE"],
-    credentials: true,
-  })
-);
+app.use(cors(corsOptions));
+
+app.use(function (req, res, next) {
+  console.log("URL:", req.url);
+  next();
+});
 
 const PORT = 3000;
 
@@ -144,7 +148,6 @@ app.get("/soundboards/:id", async (req, res) => {
     res.status(500).send("internal server error");
   }
 });
-
 // create soundboard
 app.post("/soundboards", upload.any(), ensureAuth, async (req, res) => {
   const { title, description } = req.body;
@@ -164,7 +167,7 @@ app.post("/soundboards", upload.any(), ensureAuth, async (req, res) => {
         contentType: file.mimetype,
         fileSize: file.size,
         duration: 15,
-        uniqueID: `${Date.now().toString()}-${index}`,
+        uniqueID: crypto.randomBytes(16).toString("hex"),
         buffer: file.buffer,
       });
     });
@@ -206,28 +209,33 @@ app.get("/soundboards/:id/edit", ensureOwner, async (req, res) => {
 app.put("/soundboards/:id", upload.any(), ensureOwner, async (req, res) => {
   const { editTitles, deleteSounds, newTitle, description, title } = req.body;
   const image = req.files.find((file) => file.fieldname === "image");
+
   try {
     const soundboard = await Soundboard.findById(req.params.id);
-    soundboard.title = title;
-    soundboard.description = description;
-    if (image) {
-      soundboard.image.data = image.buffer;
-      soundboard.image.contentType = image.mimetype;
-    }
     if (!soundboard) {
       return res.status(404).send("Soundboard not found");
     }
+
+    soundboard.title = title;
+    soundboard.description = description;
+    if (image) {
+      soundboard.image = {
+        data: image.buffer,
+        contentType: image.mimetype,
+      };
+    }
+
     // update existing sound titles and sound files
     if (editTitles) {
       for (const soundId in editTitles) {
         const sound = soundboard.sounds.id(soundId);
         if (sound) {
           sound.title = editTitles[soundId];
-          // find updated sound file in request
+
           const updatedSound = req.files.find(
             (file) => file.fieldname === `editSounds[${soundId}]`
           );
-          // if found, update the sound file
+
           if (updatedSound) {
             sound.filename = updatedSound.originalname;
             sound.contentType = updatedSound.mimetype;
@@ -237,17 +245,22 @@ app.put("/soundboards/:id", upload.any(), ensureOwner, async (req, res) => {
         }
       }
     }
+
     // delete selected sounds
     if (deleteSounds) {
+      console.log("deleteSounds:", deleteSounds);
       deleteSounds.forEach((soundId) => {
         soundboard.sounds.pull(soundId);
+        console.log(`Deleted sound with ID: ${soundId}`);
       });
     }
+
     // add new sounds
     if (newTitle && newTitle.length > 0 && req.files && req.files.length > 0) {
       const audioFiles = req.files.filter((file) =>
         file.fieldname.startsWith("audioFile")
       );
+
       audioFiles.forEach((file, index) => {
         soundboard.sounds.push({
           title: newTitle[index] || file.originalname,
@@ -255,27 +268,35 @@ app.put("/soundboards/:id", upload.any(), ensureOwner, async (req, res) => {
           contentType: file.mimetype,
           fileSize: file.size,
           duration: 15,
-          uniqueID: `${Date.now().toString()}-${index}`,
+          uniqueID: crypto.randomBytes(16).toString("hex"),
           buffer: file.buffer,
         });
       });
     }
+
     await soundboard.save();
-    res.redirect(`/soundboards/${req.params.id}/edit`);
+    res.json({
+      redirectUrl: `http://localhost:3001/soundboards/${soundboard._id}/edit`,
+    });
   } catch (err) {
     console.error(err);
-    res.status(500).send("internal server error");
+    res.status(500).send("Internal server error");
   }
 });
 
 // delete soundboard
 app.delete("/soundboards/:id", ensureOwner, async (req, res) => {
   try {
+    console.log(
+      `received request from frontend to delete soundboard with ID: ${req.params.id}`
+    );
     await Soundboard.findByIdAndRemove(req.params.id);
-    res.redirect("/");
+    res
+      .status(200)
+      .json({ message: "successfully deleted soundboard", redirectUrl: "/" });
   } catch (err) {
     console.error(err);
-    res.status(500).send("internal server error");
+    res.status(500).json({ message: "internal server error" });
   }
 });
 

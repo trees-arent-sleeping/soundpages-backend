@@ -10,13 +10,12 @@
   </head>
   <body>
     <h1>Create a Soundboard</h1>
+  </hr>
     <form action="/soundboards" method="post" enctype="multipart/form-data">
       <label for="title">Title:</label><br />
       <input type="text" id="title" name="title" /><br />
-
       <label for="description">Description:</label><br />
       <input type="text" id="description" name="description" /><br />
-
       <label for="image">Image:</label><br />
       <input type="file" id="image" name="image" /><br />
       <br />
@@ -27,7 +26,7 @@
             class="audioTitle"
             placeholder="TITLE"
             name="audioTitle[]"
-          />———<input type="file" class="audioFile" name="audioFiles[]" />
+          />——————<input type="file" class="audioFile" name="audioFiles[]" />
         </div>
       </div>
       <button type="button" id="addAudio">Add another audio file</button><br />
