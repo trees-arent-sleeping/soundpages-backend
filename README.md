@@ -41,7 +41,7 @@ This project is now organized into two separate repositories, one for the fronte
 
 1. Clone the repository: `git clone https://github.com/trees-arent-sleeping/soundpages-backend`
 2. Navigate to the project directory: `cd soundpages-backend`
-3. Install the dependencies: `npm install`
+3. Install the dependencies: `npm install dotenv express cors method-override multer mongoose path passport express-session`
 4. Set up the required environment variables:
 
    - Create a `.env` file in the root directory of the project.
